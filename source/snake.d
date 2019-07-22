@@ -18,7 +18,6 @@ struct Snake {
         return parts[0];
     }
 
-
     this(int width, int height) {
         auto ut = Clock.currTime().toUnixTime();
         auto rnd = Random(cast(uint) ut);
@@ -61,5 +60,4 @@ struct Snake {
         parts.length=0;
         resetParts(width, height);
     }
-
 }

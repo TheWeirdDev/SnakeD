@@ -19,7 +19,7 @@ struct Food {
     int x,y;
     bool showing;
 }
-Food food;
+private Food food;
 
 private void printGame() {
     foreach (ref part; mySnake.parts) {
@@ -81,7 +81,7 @@ void putFood(){
     do {
         x = uniform(1, HEIGHT-1, rnd);
         y = uniform(1, WIDTH-1, rnd);
-        what = getCharAt(mySnake.head.x, mySnake.head.y);
+        what = getCharAt(x, y);
     } while (what != ' ');
     food.x = x;
     food.y = y;
@@ -108,6 +108,10 @@ private void showWindow() {
     clear();
     refresh();
     getmaxyx(stdscr, y, x);
+    if (x < WIDTH || y < HEIGHT) {
+        printw("Not enough space. Resize your terminal window");
+        return;
+    }
 
     bkgd(COLOR_PAIR(1));
     refresh();
@@ -179,6 +183,7 @@ void main() {
             gameOver = false;
             score = 0;
             mySnake.reset();
+            putFood();
         }
         usleep(150 * 1000);
         showWindow();
