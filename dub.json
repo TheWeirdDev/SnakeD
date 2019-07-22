@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"Alireza |S.N|"
+	],
+	"copyright": "Copyright © 2019, Alireza |S.N|",
+	"dependencies": {
+		"ncurses": "*"
+	},
+	"description": "A simple snake game in D",
+	"license": "GPL3",
+	"name": "snake"
+}
