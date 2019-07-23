@@ -125,12 +125,12 @@ private void showWindow() {
 
     wattron(win, COLOR_PAIR(3));
     wattroff(win, COLOR_PAIR(3));
-    mvwprintw(win, 14, 2, "Score: %d".toStringz, score);
-    mvwprintw(win, 14, 33, "exit = q".toStringz, score);
+    mvwprintw(win, HEIGHT-1, 2, " Score: %d ".toStringz, score);
+    mvwprintw(win, HEIGHT-1, WIDTH-11, " exit = q ".toStringz, score);
     if (gameOver || won) {
-          mvwprintw(win, 6, 18, gameOver ? "Game Over!".toStringz : "You Won !!".toStringz);
-          mvwprintw(win, 8, 18, "Score = %d".toStringz, score);
-          mvwprintw(win, 9, 10, "q to exit, r to restart".toStringz);
+          mvwprintw(win, HEIGHT/2, WIDTH/2-5, gameOver ? "Game Over!".toStringz : "You Won !!".toStringz);
+          mvwprintw(win,  HEIGHT/2+1, WIDTH/2-5, "Score = %d".toStringz, score);
+          mvwprintw(win,  HEIGHT/2+2, WIDTH/2-10, "q to exit, r to restart".toStringz);
           return;
     }
     printGame();
