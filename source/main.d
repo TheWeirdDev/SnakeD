@@ -104,19 +104,13 @@ private void checkCollision(){
 private void showWindow() {
     int x, y;
 
-    refresh();
-    clear();
-    refresh();
+    werase(win);
     getmaxyx(stdscr, y, x);
     if (x < WIDTH || y < HEIGHT) {
         printw("Not enough space. Resize your terminal window");
         return;
     }
 
-    bkgd(COLOR_PAIR(1));
-    refresh();
-
-    win = newwin(HEIGHT, WIDTH, 1, 2);
     scope(exit) wrefresh(win);
 
     box(win, 0, 0);
@@ -139,6 +133,7 @@ private void showWindow() {
 extern(C) void sig_handler(int sig_num){
     delwin(win);
     endwin();
+    win = newwin(HEIGHT, WIDTH, 1, 2);
     showWindow();
 }
 
@@ -159,6 +154,8 @@ void main() {
     keypad(stdscr,true);
 
     mySnake = Snake(WIDTH, HEIGHT);
+    bkgd(COLOR_PAIR(1));
+    win = newwin(HEIGHT, WIDTH, 1, 2);
 
     showWindow();
     while(true){
