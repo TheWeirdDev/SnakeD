@@ -4,6 +4,7 @@ import core.sys.posix.unistd;
 import snake;
 import std.random;
 static import std.datetime;
+import core.stdc.stdlib;
 
 enum SIGWINCH = 28;
 extern(C) void signal(int sig, void function(int) );
@@ -29,6 +30,8 @@ private void printGame() {
         mySnake.parts[i].x =  mySnake.parts[i-1].x;
         mySnake.parts[i].y =  mySnake.parts[i-1].y;
     }
+
+    checkMovements();
     final switch(mySnake.dir){
         case Direction.UP:
             mySnake.head.x--;
@@ -72,7 +75,7 @@ private long getCharAt(int x, int y) {
     return mvwinch(win, x, y) & 0xff;
 }
 
-void putFood(){
+private void putFood(){
     long what;
     int x, y;
 
@@ -87,7 +90,31 @@ void putFood(){
     food.y = y;
     food.showing = true;
 }
-
+private void checkMovements() {
+    int ch = getch();
+    if(ch == 'q' || ch == 'Q'){
+        delwin(win);
+        endwin();
+        exit(0);
+    } else if (ch == KEY_RIGHT) {
+        if (mySnake.dir != Direction.LEFT)
+            mySnake.dir = Direction.RIGHT;
+    } else if (ch == KEY_LEFT) {
+        if (mySnake.dir != Direction.RIGHT)
+            mySnake.dir = Direction.LEFT;
+    } else if (ch == KEY_UP) {
+        if (mySnake.dir != Direction.DOWN)
+            mySnake.dir = Direction.UP;
+    } else if (ch == KEY_DOWN) {
+        if (mySnake.dir != Direction.UP)
+            mySnake.dir = Direction.DOWN;
+    } else if ((ch == 'r' || ch == 'R') && (gameOver || won)) {
+        gameOver = false;
+        score = 0;
+        mySnake.reset();
+        putFood();
+    }
+}
 private void checkCollision(){
     immutable what = getCharAt(mySnake.head.x, mySnake.head.y);
     if (what == '*') {
@@ -128,9 +155,10 @@ private void showWindow() {
     mvwprintw(win, HEIGHT-1, 2, " Score: %d ".toStringz, score);
     mvwprintw(win, HEIGHT-1, WIDTH-11, " exit = q ".toStringz, score);
     if (gameOver || won) {
-          mvwprintw(win, HEIGHT/2, WIDTH/2-5, gameOver ? "Game Over!".toStringz : "You Won !!".toStringz);
-          mvwprintw(win,  HEIGHT/2+1, WIDTH/2-5, "Score = %d".toStringz, score);
-          mvwprintw(win,  HEIGHT/2+2, WIDTH/2-10, "q to exit, r to restart".toStringz);
+          mvwprintw(win, HEIGHT/2-1, WIDTH/2-5, gameOver ? "Game Over!".toStringz : "You Won !!".toStringz);
+          mvwprintw(win,  HEIGHT/2, WIDTH/2-5, "Score = %d".toStringz, score);
+          mvwprintw(win,  HEIGHT/2+1, WIDTH/2-10, "q to exit, r to restart".toStringz);
+          checkMovements();
           return;
     }
     printGame();
@@ -162,30 +190,7 @@ void main() {
 
     showWindow();
     while(true){
-        int ch = getch();
-        if(ch == 'q' || ch == 'Q'){
-            delwin(win);
-            endwin();
-            break;
-        } else if (ch == KEY_RIGHT) {
-            if (mySnake.dir != Direction.LEFT)
-                mySnake.dir = Direction.RIGHT;
-        } else if (ch == KEY_LEFT) {
-            if (mySnake.dir != Direction.RIGHT)
-                mySnake.dir = Direction.LEFT;
-        } else if (ch == KEY_UP) {
-            if (mySnake.dir != Direction.DOWN)
-                mySnake.dir = Direction.UP;
-        } else if (ch == KEY_DOWN) {
-            if (mySnake.dir != Direction.UP)
-                mySnake.dir = Direction.DOWN;
-        } else if ((ch == 'r' || ch == 'R') && gameOver) {
-            gameOver = false;
-            score = 0;
-            mySnake.reset();
-            putFood();
-        }
-        usleep(150 * 1000);
         showWindow();
+        usleep(150 * 1000);
     }
 }
