@@ -131,6 +131,7 @@ private void checkCollision(){
 private void showWindow() {
     int x, y;
 
+    clear();
     werase(win);
     getmaxyx(stdscr, y, x);
     if (x < WIDTH || y < HEIGHT) {
@@ -140,8 +141,9 @@ private void showWindow() {
 
     scope(exit) wrefresh(win);
 
-    box(win, 0, 0);
     wbkgd(win, COLOR_PAIR(2));
+    wclear(win);
+    box(win, 0, 0);
     mvwprintw(win, 0, 2, "Snake Game".toStringz, x, y);
 
     wattron(win, COLOR_PAIR(3));
