@@ -1,4 +1,0 @@
-bytes allocated, allocations, type, function, file:line
-           1440	              5	snake.SnakePart[] main.checkCollision source/main.d:100
-            208	              3	snake.SnakePart[] snake.Snake.resetParts source/snake.d:55
-             32	              1	snake.SnakePart[] snake.Snake.resetParts source/snake.d:37

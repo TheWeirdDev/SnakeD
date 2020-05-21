@@ -1,3 +1,5 @@
 snake
 .vscode/
 .dub/
+.gdb_history
+profilegc.log
